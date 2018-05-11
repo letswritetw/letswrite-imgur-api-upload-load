@@ -49,13 +49,13 @@ block main
   section#list
     h2 album images list 圖片列表
     .lost
-    .lost-sizer
-    .lost-items(v-for="l in list")
-      .card
-        img(:src="l.link", :alt="l.title")
-        .card-body
-          h5 {{ l.title }}
-          p {{ l.description }}
+      .lost-sizer
+      .lost-items(v-for="l in list")
+        .card
+          img(:src="l.link", :alt="l.title")
+          .card-body
+            h5 {{ l.title }}
+            p {{ l.description }}
 
 block js
   script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js")
@@ -157,16 +157,15 @@ block js
       mounted() {
         const self = this;
         $.ajax(self.settingsList).done(function(res) {
-          self.list = res.data.reverse();
-          setTimeout(function(){
+          self.list = res.data;
+          $(window).on('load', () => {
             $('.lost').isotope({
               itemSelector: '.lost-items',
-              percentPosition: true,
               masonry: {
                 columnWidth: '.lost-sizer'
               }
             });
-          }, 3000);
+          });
         });
       }
     });

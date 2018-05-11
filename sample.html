@@ -110,13 +110,14 @@
         </div>
         <section id="list">
           <h2>album images list 圖片列表</h2>
-          <div class="lost"></div>
-          <div class="lost-sizer"></div>
-          <div class="lost-items" v-for="l in list">
-            <div class="card"><img :src="l.link" :alt="l.title">
-              <div class="card-body">
-                <h5>{{ l.title }}</h5>
-                <p>{{ l.description }}</p>
+          <div class="lost">
+            <div class="lost-sizer"></div>
+            <div class="lost-items" v-for="l in list">
+              <div class="card"><img :src="l.link" :alt="l.title">
+                <div class="card-body">
+                  <h5>{{ l.title }}</h5>
+                  <p>{{ l.description }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -230,16 +231,15 @@
         mounted() {
           const self = this;
           $.ajax(self.settingsList).done(function(res) {
-            self.list = res.data.reverse();
-            setTimeout(function(){
+            self.list = res.data;
+            $(window).on('load', () => {
               $('.lost').isotope({
                 itemSelector: '.lost-items',
-                percentPosition: true,
                 masonry: {
                   columnWidth: '.lost-sizer'
                 }
               });
-            }, 3000);
+            });
           });
         }
       });
