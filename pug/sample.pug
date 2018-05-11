@@ -157,7 +157,7 @@ block js
       mounted() {
         const self = this;
         $.ajax(self.settingsList).done(function(res) {
-          self.list = res.data;
+          self.list = res.data.reverse();
           $(window).on('load', () => {
             $('.lost').isotope({
               itemSelector: '.lost-items',
