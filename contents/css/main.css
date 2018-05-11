@@ -33,6 +33,8 @@ body { background: #f5fbff; letter-spacing: 1.5px; font-family: 'Noto Sans TC', 
 
 img { display: block; max-width: 100%; height: auto; }
 
+hr { margin: 16px auto; margin: 1rem auto; width: 90%; height: 0; background: transparent; border: 0; border-top: 1px solid #EEE; }
+
 .hide-desktop-up { display: none !important; }
 
 @media screen and (max-width: 768px) { .hide-desktop-up { display: block !important; } }
