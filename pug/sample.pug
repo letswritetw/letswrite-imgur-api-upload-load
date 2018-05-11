@@ -1,0 +1,166 @@
+extends template
+
+block config
+  - var metaTitle = 'Imgur API：upload, load 上傳、讀取 範例'
+  - var description = 'Auguston 針對Imgur api中的upload、load功能製作的範例。'
+  - var url = 'https://auguston.github.io/imgur-api-upload-load/sample.html'
+  - var fbImg = 'https://auguston.github.io/imgur-api-upload-load/contents/img/fb.jpg'
+  - var keywords = 'imgur,api,upload,load'
+
+block main
+  .chapter-title
+    h1 Imgur API：upload, load 上傳、讀取 範例
+    p 針對Imgur api中的upload、load功能做示範，以及心得筆記。
+    p Demonstrate the upload and load functions in the Imgur api and take notes.
+  
+  #upload.contents
+    .loading-mask(:class="{ show: toggleLoading }")
+      img(src="../contents/img/loading.gif", alt="loading")
+
+    h2 Upload 上傳照片 範例
+    form
+      .input-block
+        label(for='upload') 選擇上傳圖檔
+        input#upload.form-control-file(type="file", accept="image/*", @change="showFile")
+    
+      div(v-show="fs.name != ''")
+        h5 圖片預覽 
+          small {{ fs.size }}
+        img.thumbnail(:src="fs.thumbnail")
+        p {{ fs.name }}
+      
+      .input-block
+        label(for="title") 圖片名稱：
+        input#title.form-control(type="text", v-model="title", @keyup.13="submit", required)
+      
+      .input-block
+        label(for="des") 圖片描述：
+        input#des.form-control(type="text", v-model="des", @keyup.13="submit", required)
+
+      .btn-wrap
+        a.btn(href="#", @click.prevent="submit") 上傳
+
+    hr
+
+  section#list
+    h2 album images list 圖片列表
+    .lost
+    .lost-sizer
+    .lost-items(v-for="l in list")
+      .card
+        img(:src="l.link", :alt="l.title")
+        .card-body
+          h5 圖片名稱：{{ l.title }}
+          p 圖片描述：{{ l.description }}
+
+block js
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js")
+  script.
+    const id = 'f17e8e1219942d3';
+    const token = '6a44050c14fa434fae699485a9a34ba3c5b6fd6b';
+    const album = 'FJTRZpC';
+    const user = 'augustus0818';
+
+    //- upload
+    var upload = new Vue({
+      el: '#upload',
+      data: {
+        album: album,
+        file: null,
+        fs: {
+          base: null,
+          name: '',
+          thumbnail: null,
+          size: null
+        },
+        title: '',
+        des: '',
+        toggleLoading: false
+      },
+      methods: {
+        showFile(e) {
+          this.file = e.target.files[0];
+
+          this.fs.name = this.file.name;
+          this.fs.size = Math.floor(this.file.size * 0.001) + 'KB';
+          this.fs.thumbnail = window.URL.createObjectURL(this.file);
+          this.title = this.fs.name;
+        },
+        submit() {          
+          if(this.fs.name === '') {
+            alert('請選擇要上傳的圖片');
+            return false;
+          }
+          if(this.title === '' || this.des === '') {
+            alert("圖片名稱、圖片描述 皆為必填");
+            return false;
+          }
+          else {
+            const self = this;
+            this.toggleLoading = true;
+
+            setTimeout(function(){
+              let settings = {
+                async: false,
+                crossDomain: true,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: 'https://api.imgur.com/3/image',
+                headers: {
+                  Authorization: 'Bearer ' + token,
+                  Accept: 'application/json'
+                },
+                mimeType: 'multipart/form-data'
+              };
+
+              let form = new FormData();
+              form.append("image", self.file);
+              form.append("name", "augustus");
+              form.append("title", self.title);
+              form.append("description", self.des);
+              form.append("album", album);
+
+              settings.data = form;
+
+              $.ajax(settings).done(function(res) {
+                alert('上傳完成，稍待一會兒就可以在底部的列表上看見了。');
+                location.reload();
+              });
+            }, 500);
+
+          }
+        }
+      }
+    });
+
+    //- load album
+    var list = new Vue({
+      el: '#list',
+      data: {
+        user: user,
+        list: null,
+        settingsList: {
+          "async": true,
+          "crossDomain": true,
+          "url": "https://api.imgur.com/3/album/" + album + "/images",
+          "method": "GET",
+          "headers": {
+            "Authorization": 'Bearer ' + token
+          }
+        }
+      },
+      mounted() {
+        const self = this;
+        $.ajax(self.settingsList).done(function(res) {
+          self.list = res.data.reverse();
+          $('.lost').isotope({
+            itemSelector: '.lost-items',
+            percentPosition: true,
+            masonry: {
+              columnWidth: '.lost-sizer'
+            }
+          });
+        });
+      }
+    });

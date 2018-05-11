@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Imgur API：upload, load 上傳、讀取 心得筆記</title>
+    <meta name="description" content="Auguston 針對Imgur api中的upload、load功能寫的心得筆記。">
+    <link rel="canonical" href="https://auguston.github.io/imgur-api-upload-load/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
+    <link rel="shortcut icon" href="https://auguston.github.io/0-sample-github/contents/img/favicon.ico">
+    <meta name="theme-color" content="#2a5298">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#2a5298">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.css">
+    <link rel="stylesheet" href="contents/css/main.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+
+    <meta property="fb:app_id" content="484081328635964">
+    <meta property="og:url" content="https://auguston.github.io/imgur-api-upload-load/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Imgur API：upload, load 上傳、讀取 心得筆記">
+    <meta property="og:title" content="Imgur API：upload, load 上傳、讀取 心得筆記">
+    <meta property="og:description" content="Auguston 針對Imgur api中的upload、load功能寫的心得筆記。">
+    <meta property="og:image" content="https://auguston.github.io/imgur-api-upload-load/contents/img/fb.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="keywords" content="imgur,api,upload,load">
+
+
+<!--[if lte IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<![endif]-->
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-74398300-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-74398300-1');
+</script>
+
+<!-- fb -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.11';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  </head>
+  <body>
+    <div class="container">
+      <aside class="navbar-wrap">
+        <div class="mobile-top">
+          <figure class="avatar"><img src="https://auguston.github.io/0-sample-github/contents/img/avatar.jpg" alt="Auguston">
+            <figcaption>Auguston</figcaption>
+          </figure>
+          <div class="analytics">
+            <div class="views"><i class="fas fa-eye"></i><span class="js-pageviews"></span></div><a class="email" href="mailto:augustus0818@gmail.com" title="augustus0818@gmail.com"><i class="fas fa-envelope"></i><span>augustus</span></a>
+          </div>
+          <div class="burger-button js-trigger-burger hide-desktop-up"><span></span><span></span><span></span></div>
+        </div>
+        <nav class="navbar js-nav-wave">
+          <div class="divider">作品連結</div>
+          <div class="main-links"><a target="_blank" href="https://github.com/auguston"><i class="fab fa-github"></i><span>github</span></a><a target="_blank" href="https://www.i-see.tw/sean-su/"><i class="fas fa-globe"></i><span>website</span></a><a class="toggle-share hide-desktop-up js-open-social" href="#"><i class="fas fa-share-alt-square"></i><span>share</span></a></div>
+          <div class="divider js-social-share">社群分享</div>
+          <div class="social-links"><a class="js-line" target="_blank" href="" title="line"><i class="fab fa-line"></i></a><a class="js-facebook" target="_blank" href="" title="facebook"><i class="fab fa-facebook-square"></i></a><a class="js-google" target="_blank" href="" title="google+"><i class="fab fa-google-plus-square"></i></a><a class="js-twitter" target="_blank" href="" title="twitter">
+              <div class="fab fa-twitter-square"></div></a></div>
+        </nav>
+      </aside>
+      <main class="contents-wrap">
+        <div class="chapter-title">
+          <h1>Imgur API：upload, load 上傳、讀取 心得筆記</h1>
+          <p>針對Imgur api中的upload、load功能做示範，以及心得筆記。</p>
+          <p>Demonstrate the upload and load functions in the Imgur api and take notes.</p>
+        </div>
+        <div class="contents">
+          <h2>相關連結</h2>
+          <p>Imgur api document：<a href="https://apidocs.imgur.com/" target="_blank">官方說明文件</a></p>
+          <p>Imgur app 註冊頁面：<a href="https://api.imgur.com/oauth2/addclient" target="_blank">點此註冊</a></p>
+          <p>Postman下載：<a href="https://www.getpostman.com/" target="_blank">點此進下載頁面</a></p>
+          <h2>關於本篇</h2>
+          <p>雖然說一些國外的Blog都說Imgur api的文件寫得很齊全，但實際在使用的時候，覺得很麻煩啊！尤其拿token還得下載postman，第一次用為了找他的一個按鈕還摸索了一陣。</p>
+          <p>這篇是這兩天在接api時的心得及筆記，因為覺得不記下來下一次要用一定會忘記。</p>
+          <h2>步驟一：註冊Imgur App</h2>
+          <p>在第一段相關連結裡，有附上Imgur app 註冊頁面的連結。有了Imgur帳號，點進後就可以開始註冊。</p>
+          <div class="img"><img src="../contents/img/1.png" alt="註冊Imgur App"></div>
+          <p>Authorization type 選擇第二個不用回傳 URL。再輸入完email後按下submit，就可以看到 App 的 ID、secret。</p>
+          <div class="img"><img src="../contents/img/2.png" alt="註冊Imgur App"></div>
+          <p>secret先另外記起來，因為之後再進App看，只會看到ID，secret要看就要重新產生一組新的。</p>
+          <p>註冊了App後，在個人設定(settings)的 Applications 中，就會看到了。</p>
+          <div class="img"><img src="../contents/img/3.png" alt="註冊Imgur App"></div>
+          <p>接著很重要的一步，是等等拿token時會用到的(在這步卡很久)，在 Redirect 那欄，點下那個 edit ，輸入「https://www.getpostman.com/oauth2/callback」，然後按下 update。</p>
+          <div class="img"><img src="../contents/img/4.png" alt="註冊Imgur App"></div>
+          <p>這樣之後在拿token的登入帳號步驟就不會卡關了。</p>
+          <h2>步驟二：生出token</h2>
+          <p>第一段的相關連結，先點選下載 Postman，並安裝。</p>
+          <p>安裝完後開啟 Postman，選擇新建 Request：</p>
+          <div class="img"><img src="../contents/img/5.png" alt="生出token"></div>
+          <p>接著 type 選擇 OAuth 2.0，再點 Get New Access Token：</p>
+          <div class="img"><img src="../contents/img/6.png" alt="生出token"></div>
+          <p>會出現一個燈箱。</p>
+          <p>Callback URL 填：https://www.getpostman.com/oauth2/callback</p>
+          <p>Auth URL 填：https://api.imgur.com/oauth2/authorize</p>
+          <p>Access Token URL 填：https://api.imgur.com/oauth2/token</p>
+          <p>Client ID、Client Secret 就填入步驟一那邊註冊完 App 後頁面上顯示的。</p>
+          <div class="img"><img src="../contents/img/7.png" alt="生出token"></div>
+          <p>填完後按下 Request Token，就會出現一個要登入 Imgur 帳號的視窗：</p>
+          <div class="img"><img src="../contents/img/8.png" alt="生出token"></div>
+          <p>Imgur 是用 Email 註冊的話，輸入完信箱、密碼，按下 allow 就行了。</p>
+          <p>但，如果是用社群帳號就會有很大的問題，按下去會沒反應。</p>
+          <p>朋友提供的解法是，先進入<a href="https://imgur.com/signin?redirect=https%3A%2F%2Fimgur.com%2F" target="_blank">Imgur 登入頁面</a>，如果是登入狀態的請登出。</p>
+          <p>登入頁面上，按下密碼旁邊的 forgot? ，沒錯，就是要重設密碼。</p>
+          <p>重設完密碼，登入時就可以用一般輸入帳密的方式登入了。這樣在 Request Token 時就可以順利登入並取得 token。</p>
+          <p>取得 token ，會顯示在一個燈箱裡：</p>
+          <div class="img"><img src="../contents/img/9.png" alt="生出token"></div>
+          <p>把 Access Token 記下來，在讀取跟傳送圖片時會用到。</p>
+          <p>需要注意的是，token的有效期是一個月。</p>
+          <h2>步驟三：Upload 上傳 程式範例</h2>
+          <p>有了 token，接著就可以開始寫上傳圖片的程式了。</p>
+          <p>補充一下，如果要設定上傳的圖片放到指定相簿裡，就會需要相簿的 ID。</p>
+          <p>假設相簿的網址是：https://imgur.com/a/XXXXXXXX</p>
+          <p>那相簿的 ID 就是 XXXXXXXX。</p>
+          <p>以下使用 jQuery、Vue.js。</p>
+          <h3>html部份</h3>
+          <div class="code-wrap">
+            <pre class="prettyprint"><code class="language-html">// 選取圖片的 input
+&lt;label for="upload">選擇上傳圖檔&lt;/label>
+&lt;input id="upload" type="file" accept="image/*" @change="showFile">
+
+// 圖片標題
+&lt;label for="title">圖片名稱&lt;/label>
+&lt;input class="form-control" id="title" type="text" v-model="title" @keyup.13="submit" required>
+
+// 圖片描述
+&lt;label for="des">圖片描述&lt;/label>
+&lt;input class="form-control" id="des" type="text" v-model="des" @keyup.13="submit" required>
+
+// 上傳按鈕
+&lt;button class="btn btn-primary" type="button" @click="submit">上傳&lt;/button>
+
+// 引用js
+&lt;script src="https://code.jquery.com/jquery-2.2.4.min.js">&lt;/script>
+&lt;script src="https://unpkg.com/vue/dist/vue.js">&lt;/script></code></pre>
+          </div>
+          <p>如果對Vue.js不熟，把 showFile、submit 這兩個事件另外寫成 function，在用 jQuery 的 on 去監聽也行。</p>
+          <h3>js部份</h3>
+          <div class="code-wrap">
+            <pre class="prettyprint"><code class="language-js"></code>const id = 'XXXX'; // 填入 App 的 Client ID
+const token = 'XXXXXXXXX'; // 填入 token
+const album = 'XXXX'; // 若要指定傳到某個相簿，就填入相簿的 ID
+ 
+//- upload
+const upload = new Vue({
+  el: '#upload',
+  data: {
+    album: album, // 若要指定傳到某個相簿，就填入相簿的 ID
+    file: null, // 準備拿 input type="file" 的值
+    fs: {
+      name: '', // input的圖檔名稱
+      thumbnail: null, // input的圖片縮圖
+      size: null // input的圖片大小
+    },
+    title: '', // 圖片標題
+    des: '' // 圖片描述
+  },
+  methods: {
+    showFile(e) {
+      this.file = e.target.files[0]; // input type="file" 的值
+      this.fs.name = this.file.name; // input的圖檔名稱
+      this.fs.size = Math.floor(this.file .size * 0.001) + 'KB'; // input的圖片大小
+      this.fs.thumbnail = window.URL.createObjectURL(this.file); // input的圖片縮圖
+      this.title = this.fs.name; // 預設 input 的圖檔名稱為圖片上傳時的圖片標題
+    },
+    submit() {
+      let settings = {
+        async: false,
+        crossDomain: true,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        url: 'https://api.imgur.com/3/image',
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        mimeType: 'multipart/form-data'
+      };
+ 
+      let form = new FormData();
+      form.append('image', this.file);
+      form.append('title', this.title);
+      form.append('description', this.des);
+      form.append('album', album); // 有要指定的相簿就加這行
+ 
+      settings.data = form;
+ 
+      $.ajax(settings).done(function(res) {
+        console.log(res); // 可以看見上傳成功後回的值
+        alert('上傳完成，稍待一會兒就可以在底部的列表上看見了。')
+      });
+    }
+  }
+});</pre>
+          </div>
+          <h2>步驟四：Load 讀取 程式範例</h2>
+          <p>這邊的範例是抓特定相簿中的圖。</p>
+          <h3>js部份</h3>
+          <div class="code-wrap">
+            <pre class="prettyprint"><code class="language-js"></code>const id = 'XXXX'; // 填入 App 的 Client ID
+const token = 'XXXXXXXXX'; // 填入 token
+const album = 'XXXX'; // 相簿的 ID
+ 
+const list = new Vue({
+  el: '#list',
+  data: {
+    user: user,
+    list: null, // 準備存 ajax 後來的資料
+    settingsList: {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://api.imgur.com/3/album/" + album + "/images",
+      "method": "GET",
+      "headers": {
+        "Authorization": 'Bearer ' + token
+      }
+    }
+  },
+  mounted() {
+    const self = this;
+    $.ajax(self.settingsList).done(function(res) {
+      console.log(res.data); // 回傳該相簿裡的圖片資料
+      self.list = res.data;  // list 就是資料了，之後用 v-for 就可以倒出來
+    });
+  }
+});</pre>
+          </div>
+          <h2>範例、其它說明</h2>
+          <p>範例連結如下：</p>
+          <div class="btn-wrap"><a class="btn" href="sample.html">imgur api 範例</a></div>
+          <p>用 js 的方式呼 api，目前會把 Client ID、token都寫成明碼。</p>
+          <p>有試過用 webpack 或 gulp 的打包功打包，但強大如 Chrome，還是可以看到原始碼的。</p>
+          <p>如果有可以把明碼轉成隱私的方法歡迎提供。</p>
+        </div>
+        <div class="fb-comments" data-href="https://auguston.github.io/imgur-api-upload-load/" data-numposts="5" data-colorscheme="dark"></div>
+        <footer class="footer-wrap">
+          <h6 class="js-copyright"><span>&copy;</span><span class="year">2018 Auguston All Rights Reserved.</span></h6>
+        </footer>
+      </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.js"></script>
+    <script src="https://auguston.github.io/0-sample-github/contents/js/main.min.js"></script>
+  </body>
+</html>

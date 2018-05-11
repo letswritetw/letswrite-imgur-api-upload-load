@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta name="description" content="Auguston 針對Imgur api中的upload、load功能製作的範例。">
+    <link rel="canonical">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
+    <link rel="shortcut icon" href="https://auguston.github.io/0-sample-github/contents/img/favicon.ico">
+    <meta name="theme-color" content="#2a5298">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#2a5298">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.css">
+    <link rel="stylesheet" href="contents/css/main.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+
+    <meta property="fb:app_id" content="484081328635964">
+    <meta property="og:url">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name">
+    <meta property="og:title">
+    <meta property="og:description" content="Auguston 針對Imgur api中的upload、load功能製作的範例。">
+    <meta property="og:image" content="https://auguston.github.io/imgur-api-upload-load/contents/img/fb.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="keywords" content="imgur,api,upload,load">
+
+
+<!--[if lte IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+<![endif]-->
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-74398300-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-74398300-1');
+</script>
+
+<!-- fb -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.11';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  </head>
+  <body>
+    <div class="container">
+      <aside class="navbar-wrap">
+        <div class="mobile-top">
+          <figure class="avatar"><img src="https://auguston.github.io/0-sample-github/contents/img/avatar.jpg" alt="Auguston">
+            <figcaption>Auguston</figcaption>
+          </figure>
+          <div class="analytics">
+            <div class="views"><i class="fas fa-eye"></i><span class="js-pageviews"></span></div><a class="email" href="mailto:augustus0818@gmail.com" title="augustus0818@gmail.com"><i class="fas fa-envelope"></i><span>augustus</span></a>
+          </div>
+          <div class="burger-button js-trigger-burger hide-desktop-up"><span></span><span></span><span></span></div>
+        </div>
+        <nav class="navbar js-nav-wave">
+          <div class="divider">作品連結</div>
+          <div class="main-links"><a target="_blank" href="https://github.com/auguston"><i class="fab fa-github"></i><span>github</span></a><a target="_blank" href="https://www.i-see.tw/sean-su/"><i class="fas fa-globe"></i><span>website</span></a><a class="toggle-share hide-desktop-up js-open-social" href="#"><i class="fas fa-share-alt-square"></i><span>share</span></a></div>
+          <div class="divider js-social-share">社群分享</div>
+          <div class="social-links"><a class="js-line" target="_blank" href="" title="line"><i class="fab fa-line"></i></a><a class="js-facebook" target="_blank" href="" title="facebook"><i class="fab fa-facebook-square"></i></a><a class="js-google" target="_blank" href="" title="google+"><i class="fab fa-google-plus-square"></i></a><a class="js-twitter" target="_blank" href="" title="twitter">
+              <div class="fab fa-twitter-square"></div></a></div>
+        </nav>
+      </aside>
+      <main class="contents-wrap">
+        <div class="chapter-title">
+          <h1>Imgur API：upload, load 上傳、讀取 範例</h1>
+          <p>針對Imgur api中的upload、load功能做示範，以及心得筆記。</p>
+          <p>Demonstrate the upload and load functions in the Imgur api and take notes.</p>
+        </div>
+        <div class="contents" id="upload">
+          <div class="loading-mask" :class="{ show: toggleLoading }"><img src="../contents/img/loading.gif" alt="loading"></div>
+          <h2>Upload 上傳照片 範例</h2>
+          <form>
+            <div class="input-block">
+              <label for="upload">選擇上傳圖檔</label>
+              <input class="form-control-file" id="upload" type="file" accept="image/*" @change="showFile">
+            </div>
+            <div v-show="fs.name != ''">
+              <h5>圖片預覽 <small>{{ fs.size }}</small></h5><img class="thumbnail" :src="fs.thumbnail">
+              <p>{{ fs.name }}</p>
+            </div>
+            <div class="input-block">
+              <label for="title">圖片名稱：</label>
+              <input class="form-control" id="title" type="text" v-model="title" @keyup.13="submit" required>
+            </div>
+            <div class="input-block">
+              <label for="des">圖片描述：</label>
+              <input class="form-control" id="des" type="text" v-model="des" @keyup.13="submit" required>
+            </div>
+            <div class="btn-wrap"><a class="btn" href="#" @click.prevent="submit">上傳</a></div>
+          </form>
+          <hr>
+        </div>
+        <section id="list">
+          <h2>album images list 圖片列表</h2>
+          <div class="lost"></div>
+          <div class="lost-sizer"></div>
+          <div class="lost-items" v-for="l in list">
+            <div class="card"><img :src="l.link" :alt="l.title">
+              <div class="card-body">
+                <h5>圖片名稱：{{ l.title }}</h5>
+                <p>圖片描述：{{ l.description }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="fb-comments" data-numposts="5" data-colorscheme="dark"></div>
+        <footer class="footer-wrap">
+          <h6 class="js-copyright"><span>&copy;</span><span class="year">2018 Auguston All Rights Reserved.</span></h6>
+        </footer>
+      </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.js"></script>
+    <script src="https://auguston.github.io/0-sample-github/contents/js/main.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
+    <script>
+      const id = 'f17e8e1219942d3';
+      const token = '6a44050c14fa434fae699485a9a34ba3c5b6fd6b';
+      const album = 'FJTRZpC';
+      const user = 'augustus0818';
+      
+      //- upload
+      var upload = new Vue({
+        el: '#upload',
+        data: {
+          album: album,
+          file: null,
+          fs: {
+            base: null,
+            name: '',
+            thumbnail: null,
+            size: null
+          },
+          title: '',
+          des: '',
+          toggleLoading: false
+        },
+        methods: {
+          showFile(e) {
+            this.file = e.target.files[0];
+      
+            this.fs.name = this.file.name;
+            this.fs.size = Math.floor(this.file.size * 0.001) + 'KB';
+            this.fs.thumbnail = window.URL.createObjectURL(this.file);
+            this.title = this.fs.name;
+          },
+          submit() {          
+            if(this.fs.name === '') {
+              alert('請選擇要上傳的圖片');
+              return false;
+            }
+            if(this.title === '' || this.des === '') {
+              alert("圖片名稱、圖片描述 皆為必填");
+              return false;
+            }
+            else {
+              const self = this;
+              this.toggleLoading = true;
+      
+              setTimeout(function(){
+                let settings = {
+                  async: false,
+                  crossDomain: true,
+                  processData: false,
+                  contentType: false,
+                  type: 'POST',
+                  url: 'https://api.imgur.com/3/image',
+                  headers: {
+                    Authorization: 'Bearer ' + token,
+                    Accept: 'application/json'
+                  },
+                  mimeType: 'multipart/form-data'
+                };
+      
+                let form = new FormData();
+                form.append("image", self.file);
+                form.append("name", "augustus");
+                form.append("title", self.title);
+                form.append("description", self.des);
+                form.append("album", album);
+      
+                settings.data = form;
+      
+                $.ajax(settings).done(function(res) {
+                  alert('上傳完成，稍待一會兒就可以在底部的列表上看見了。');
+                  location.reload();
+                });
+              }, 500);
+      
+            }
+          }
+        }
+      });
+      
+      //- load album
+      var list = new Vue({
+        el: '#list',
+        data: {
+          user: user,
+          list: null,
+          settingsList: {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://api.imgur.com/3/album/" + album + "/images",
+            "method": "GET",
+            "headers": {
+              "Authorization": 'Bearer ' + token
+            }
+          }
+        },
+        mounted() {
+          const self = this;
+          $.ajax(self.settingsList).done(function(res) {
+            self.list = res.data.reverse();
+            $('.lost').isotope({
+              itemSelector: '.lost-items',
+              percentPosition: true,
+              masonry: {
+                columnWidth: '.lost-sizer'
+              }
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

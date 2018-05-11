@@ -1,0 +1,154 @@
+// 左側導覽列
+.navbar-wrap
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  z-index: 998
+  width: 250px
+  height: 100%
+  overflow-y: hidden
+  background: linear-gradient(to top, #1e3c72 0%,#2a5298 100%)
+  color: rgba(#FFF, .87)
+  box-shadow: $z1
+  .burger-button
+    position: fixed
+    right: $px6
+    span
+      position: relative
+      display: block
+      margin: $px6 0
+      width: $px36
+      height: 3px
+      background: $main
+      transition: $transition-default
+
+  // 大頭照
+  .avatar
+    padding: 1rem
+    img
+      margin: 0 auto
+      max-width: 120px
+      border: 1px solid #1e3c72
+      border-radius: 50%
+    figcaption
+      line-height: 2
+      text-align: center
+      font-size: 2rem
+  
+  // ga pageviews
+  .analytics
+    display: flex
+    justify-content: space-around
+    align-items: center
+    padding: 1rem 0
+    .views, .email
+      display: flex
+      flex-direction: column
+      align-items: center
+    a
+      color: inherit
+    .svg-inline--fa
+      font-size: 2.5rem
+  
+  // nav
+  .navbar
+    padding: 1rem 0
+    a
+      display: block
+      padding: 1rem
+      overflow: hidden
+      text-transform: capitalize
+      text-decoration: none
+      color: rgba(#FFF, .87)
+      transition: $transition-default
+      &:hover
+        background: rgba(#000, .2)
+        color: #FFF
+
+    .main-links .svg-inline--fa
+      margin-right: 1rem
+      font-size: $px20
+    .social-links .svg-inline--fa
+      font-size: $px32
+    
+    .social-links
+      display: flex
+      justify-content: space-around
+      padding: 0 .2rem
+      a
+        padding: $px12
+        border-radius: $px6
+
+    .divider
+      padding: 1rem
+      font-size: $px12
+      color: rgba(#FFF, .54)
+      ~ .divider
+        margin-top: 2rem
+
++m-768
+  .navbar-wrap
+    overflow-y: visible
+    width: 100%
+    background: none
+    box-shadow: none
+    pointer-events: none
+    .mobile-top
+      background: linear-gradient(to top, #1e3c72 0%,#2a5298 100%)
+      transform: translateY(-100%)
+      transition: $transition-default
+      .burger-button
+        pointer-events: auto
+      &.active
+        transform: translateY(0)
+        pointer-events: auto
+        .burger-button
+          margin-top: $px22
+          span:first-of-type
+            transform: rotate(45deg)
+          span:nth-of-type(2)
+            top: -$px2
+            right: $px12
+            transform: rotate(90deg)
+          span:last-of-type
+            top: -$px18
+            right: $px24
+            transform: rotate(-45deg)
+    
+    .navbar
+      position: fixed
+      right: 0
+      left: 0
+      bottom: 0
+      padding-bottom: 0
+      transform: translateY(56px)
+      transition: $transition-default
+      pointer-events: auto
+      &.active
+        transform: translateY(0)
+      .main-links
+        display: flex
+        justify-content: space-around
+        background: linear-gradient(to top, #1e3c72 0%,#2a5298 100%)
+        a
+          flex: 1
+          padding: .5rem 0
+          text-align: center
+          &.active
+            background: $black
+        span
+          display: none
+        .svg-inline--fa
+          margin-right: 0
+          font-size: $px30
+      .social-links
+        padding: 0
+        background: $black
+        a
+          flex: 1
+          border-radius: 0
+          text-align: center
+
+      .divider
+        display: none

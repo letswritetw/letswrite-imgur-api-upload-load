@@ -1,0 +1,220 @@
+extends template
+
+block config
+  - var pageTitle = 'Imgur API：upload, load 上傳、讀取 心得筆記'
+  - var description = 'Auguston 針對Imgur api中的upload、load功能寫的心得筆記。'
+  - var fburl = 'https://auguston.github.io/imgur-api-upload-load/'
+  - var fbImg = 'https://auguston.github.io/imgur-api-upload-load/contents/img/fb.jpg'
+  - var keywords = 'imgur,api,upload,load'
+
+block main
+  .chapter-title
+    h1 Imgur API：upload, load 上傳、讀取 心得筆記
+    p 針對Imgur api中的upload、load功能做示範，以及心得筆記。
+    p Demonstrate the upload and load functions in the Imgur api and take notes.
+
+  .contents
+    h2 相關連結
+    p Imgur api document：
+      a(href="https://apidocs.imgur.com/", target="_blank") 官方說明文件
+    p Imgur app 註冊頁面：
+      a(href="https://api.imgur.com/oauth2/addclient", target="_blank") 點此註冊
+    p Postman下載：
+      a(href="https://www.getpostman.com/", target="_blank") 點此進下載頁面
+
+
+
+    h2 關於本篇
+    p 雖然說一些國外的Blog都說Imgur api的文件寫得很齊全，但實際在使用的時候，覺得很麻煩啊！尤其拿token還得下載postman，第一次用為了找他的一個按鈕還摸索了一陣。
+    p 這篇是這兩天在接api時的心得及筆記，因為覺得不記下來下一次要用一定會忘記。
+
+
+
+    h2 步驟一：註冊Imgur App
+    p 在第一段相關連結裡，有附上Imgur app 註冊頁面的連結。有了Imgur帳號，點進後就可以開始註冊。
+    .img
+      img(src="../contents/img/1.png", alt="註冊Imgur App")
+    p Authorization type 選擇第二個不用回傳 URL。再輸入完email後按下submit，就可以看到 App 的 ID、secret。
+    .img
+      img(src="../contents/img/2.png", alt="註冊Imgur App")
+    p secret先另外記起來，因為之後再進App看，只會看到ID，secret要看就要重新產生一組新的。
+    p 註冊了App後，在個人設定(settings)的 Applications 中，就會看到了。
+    .img
+      img(src="../contents/img/3.png", alt="註冊Imgur App")
+    p 接著很重要的一步，是等等拿token時會用到的(在這步卡很久)，在 Redirect 那欄，點下那個 edit ，輸入「https://www.getpostman.com/oauth2/callback」，然後按下 update。
+    .img
+      img(src="../contents/img/4.png", alt="註冊Imgur App")
+    p 這樣之後在拿token的登入帳號步驟就不會卡關了。
+
+
+
+    h2 步驟二：生出token
+    p 第一段的相關連結，先點選下載 Postman，並安裝。
+    p 安裝完後開啟 Postman，選擇新建 Request：
+    .img
+      img(src="../contents/img/5.png", alt="生出token")
+    p 接著 type 選擇 OAuth 2.0，再點 Get New Access Token：
+    .img
+      img(src="../contents/img/6.png", alt="生出token")
+    p 會出現一個燈箱。
+    p Callback URL 填：https://www.getpostman.com/oauth2/callback
+    p Auth URL 填：https://api.imgur.com/oauth2/authorize
+    p Access Token URL 填：https://api.imgur.com/oauth2/token
+    p Client ID、Client Secret 就填入步驟一那邊註冊完 App 後頁面上顯示的。
+    .img
+      img(src="../contents/img/7.png", alt="生出token")
+    p 填完後按下 Request Token，就會出現一個要登入 Imgur 帳號的視窗：
+    .img
+      img(src="../contents/img/8.png", alt="生出token")
+    p Imgur 是用 Email 註冊的話，輸入完信箱、密碼，按下 allow 就行了。
+    p 但，如果是用社群帳號就會有很大的問題，按下去會沒反應。
+    p
+      |朋友提供的解法是，先進入
+      a(href="https://imgur.com/signin?redirect=https%3A%2F%2Fimgur.com%2F", target="_blank") Imgur 登入頁面
+      | ，如果是登入狀態的請登出。
+    p 登入頁面上，按下密碼旁邊的 forgot? ，沒錯，就是要重設密碼。
+    p 重設完密碼，登入時就可以用一般輸入帳密的方式登入了。這樣在 Request Token 時就可以順利登入並取得 token。
+    p 取得 token ，會顯示在一個燈箱裡：
+    .img
+      img(src="../contents/img/9.png", alt="生出token")
+    p 把 Access Token 記下來，在讀取跟傳送圖片時會用到。
+    p 需要注意的是，token的有效期是一個月。
+
+
+
+    h2 步驟三：Upload 上傳 程式範例
+    p 有了 token，接著就可以開始寫上傳圖片的程式了。
+    p 補充一下，如果要設定上傳的圖片放到指定相簿裡，就會需要相簿的 ID。
+    p 假設相簿的網址是：https://imgur.com/a/XXXXXXXX
+    p 那相簿的 ID 就是 XXXXXXXX。
+    p 以下使用 jQuery、Vue.js。
+    
+    h3 html部份
+    .code-wrap
+      pre.prettyprint
+        code.language-html
+          | // 選取圖片的 input
+          | &lt;label for="upload">選擇上傳圖檔&lt;/label>
+          | &lt;input id="upload" type="file" accept="image/*" @change="showFile">
+          |
+          | // 圖片標題
+          | &lt;label for="title">圖片名稱&lt;/label>
+          | &lt;input class="form-control" id="title" type="text" v-model="title" @keyup.13="submit" required>
+          |
+          | // 圖片描述
+          | &lt;label for="des">圖片描述&lt;/label>
+          | &lt;input class="form-control" id="des" type="text" v-model="des" @keyup.13="submit" required>
+          |
+          | // 上傳按鈕
+          | &lt;button class="btn btn-primary" type="button" @click="submit">上傳&lt;/button>
+          |
+          | // 引用js
+          | &lt;script src="https://code.jquery.com/jquery-2.2.4.min.js">&lt;/script>
+          | &lt;script src="https://unpkg.com/vue/dist/vue.js">&lt;/script>
+    
+    p 如果對Vue.js不熟，把 showFile、submit 這兩個事件另外寫成 function，在用 jQuery 的 on 去監聽也行。
+
+    h3 js部份
+    .code-wrap
+      pre.prettyprint
+        code.language-js
+        | const id = 'XXXX'; // 填入 App 的 Client ID
+        | const token = 'XXXXXXXXX'; // 填入 token
+        | const album = 'XXXX'; // 若要指定傳到某個相簿，就填入相簿的 ID
+        | 
+        | //- upload
+        | const upload = new Vue({
+        |   el: '#upload',
+        |   data: {
+        |     album: album, // 若要指定傳到某個相簿，就填入相簿的 ID
+        |     file: null, // 準備拿 input type="file" 的值
+        |     fs: {
+        |       name: '', // input的圖檔名稱
+        |       thumbnail: null, // input的圖片縮圖
+        |       size: null // input的圖片大小
+        |     },
+        |     title: '', // 圖片標題
+        |     des: '' // 圖片描述
+        |   },
+        |   methods: {
+        |     showFile(e) {
+        |       this.file = e.target.files[0]; // input type="file" 的值
+        |       this.fs.name = this.file.name; // input的圖檔名稱
+        |       this.fs.size = Math.floor(this.file .size * 0.001) + 'KB'; // input的圖片大小
+        |       this.fs.thumbnail = window.URL.createObjectURL(this.file); // input的圖片縮圖
+        |       this.title = this.fs.name; // 預設 input 的圖檔名稱為圖片上傳時的圖片標題
+        |     },
+        |     submit() {
+        |       let settings = {
+        |         async: false,
+        |         crossDomain: true,
+        |         processData: false,
+        |         contentType: false,
+        |         type: 'POST',
+        |         url: 'https://api.imgur.com/3/image',
+        |         headers: {
+        |           Authorization: 'Bearer ' + token
+        |         },
+        |         mimeType: 'multipart/form-data'
+        |       };
+        | 
+        |       let form = new FormData();
+        |       form.append('image', this.file);
+        |       form.append('title', this.title);
+        |       form.append('description', this.des);
+        |       form.append('album', album); // 有要指定的相簿就加這行
+        | 
+        |       settings.data = form;
+        | 
+        |       $.ajax(settings).done(function(res) {
+        |         console.log(res); // 可以看見上傳成功後回的值
+        |         alert('上傳完成，稍待一會兒就可以在底部的列表上看見了。')
+        |       });
+        |     }
+        |   }
+        | });
+
+
+    h2 步驟四：Load 讀取 程式範例
+    p 這邊的範例是抓特定相簿中的圖。
+
+    h3 js部份
+    .code-wrap
+      pre.prettyprint
+        code.language-js
+        | const id = 'XXXX'; // 填入 App 的 Client ID
+        | const token = 'XXXXXXXXX'; // 填入 token
+        | const album = 'XXXX'; // 相簿的 ID
+        | 
+        | const list = new Vue({
+        |   el: '#list',
+        |   data: {
+        |     user: user,
+        |     list: null, // 準備存 ajax 後來的資料
+        |     settingsList: {
+        |       "async": true,
+        |       "crossDomain": true,
+        |       "url": "https://api.imgur.com/3/album/" + album + "/images",
+        |       "method": "GET",
+        |       "headers": {
+        |         "Authorization": 'Bearer ' + token
+        |       }
+        |     }
+        |   },
+        |   mounted() {
+        |     const self = this;
+        |     $.ajax(self.settingsList).done(function(res) {
+        |       console.log(res.data); // 回傳該相簿裡的圖片資料
+        |       self.list = res.data;  // list 就是資料了，之後用 v-for 就可以倒出來
+        |     });
+        |   }
+        | });
+    
+    h2 範例、其它說明
+    p 範例連結如下：
+    .btn-wrap
+      a.btn(href="sample.html") imgur api 範例
+    
+    p 用 js 的方式呼 api，目前會把 Client ID、token都寫成明碼。
+    p 有試過用 webpack 或 gulp 的打包功打包，但強大如 Chrome，還是可以看到原始碼的。
+    p 如果有可以把明碼轉成隱私的方法歡迎提供。
