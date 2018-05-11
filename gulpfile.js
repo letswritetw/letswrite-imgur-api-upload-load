@@ -143,7 +143,7 @@ gulp.task('es6', () => {
 gulp.task('watch', () => {
 	gulp.watch(src_Pug, ['template']);
 	gulp.watch(src_sass, ['styles']);
-	gulp.watch(src_es6js, ['es6']);
+	// gulp.watch(src_es6js, ['es6']);
 	// gulp.watch(src_mark, ['markdown']);
 });
 
@@ -166,4 +166,4 @@ gulp.task('webServer', () => {
 
 
 // cmd輸入"gulp"時，要執行的task
-gulp.task('default', ['template', 'styles', 'es6', 'webServer', 'watch']);
+gulp.task('default', ['template', 'styles', 'webServer', 'watch']);
