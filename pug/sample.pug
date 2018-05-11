@@ -19,7 +19,16 @@ block main
   
   #upload.contents
     .loading-mask(:class="{ show: toggleLoading }")
-      img(src="contents/img/loading.gif", alt="loading")
+      .cubes
+        .sk-cube.sk-cube1
+        .sk-cube.sk-cube2
+        .sk-cube.sk-cube3
+        .sk-cube.sk-cube4
+        .sk-cube.sk-cube5
+        .sk-cube.sk-cube6
+        .sk-cube.sk-cube7
+        .sk-cube.sk-cube8
+        .sk-cube.sk-cube9
 
     h2 Upload 上傳照片 範例
     form
@@ -54,8 +63,8 @@ block main
         a.card(:href="l.link", target="_blank")
           img(:src="l.link", :alt="l.title")
           .card-body
-            h5 {{ l.title }}
-            p {{ l.description }}
+            h5(v-text="l.title")
+            p(v-text="l.description")
 
 block js
   script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js")
@@ -158,7 +167,7 @@ block js
         const self = this;
         $.ajax(self.settingsList).done(function(res) {
           self.list = res.data.reverse();
-          $(window).on('load', () => {
+          $(window).on('load', function() {
             $('.lost').isotope({
               itemSelector: '.lost-items',
               masonry: {

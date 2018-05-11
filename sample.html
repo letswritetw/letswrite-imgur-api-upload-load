@@ -10,9 +10,8 @@
     <link rel="shortcut icon" href="https://auguston.github.io/0-sample-github/contents/img/favicon.ico">
     <meta name="theme-color" content="#2a5298">
     <meta name="apple-mobile-web-app-status-bar-style" content="#2a5298">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.css">
-    <link rel="stylesheet" href="contents/css/main.css?v=1.2">
+    <link rel="stylesheet" href="contents/css/main.css?v=1.3">
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -85,7 +84,19 @@
           <p><a href="index.html">心得筆記</a><span> | </span><a href="sample.html">範例</a></p>
         </div>
         <div class="contents" id="upload">
-          <div class="loading-mask" :class="{ show: toggleLoading }"><img src="contents/img/loading.gif" alt="loading"></div>
+          <div class="loading-mask" :class="{ show: toggleLoading }">
+            <div class="cubes">
+              <div class="sk-cube sk-cube1"></div>
+              <div class="sk-cube sk-cube2"></div>
+              <div class="sk-cube sk-cube3"></div>
+              <div class="sk-cube sk-cube4"></div>
+              <div class="sk-cube sk-cube5"></div>
+              <div class="sk-cube sk-cube6"></div>
+              <div class="sk-cube sk-cube7"></div>
+              <div class="sk-cube sk-cube8"></div>
+              <div class="sk-cube sk-cube9"></div>
+            </div>
+          </div>
           <h2>Upload 上傳照片 範例</h2>
           <form>
             <div class="input-block">
@@ -114,8 +125,8 @@
             <div class="lost-sizer"></div>
             <div class="lost-items" v-for="l in list"><a class="card" :href="l.link" target="_blank"><img :src="l.link" :alt="l.title">
                 <div class="card-body">
-                  <h5>{{ l.title }}</h5>
-                  <p>{{ l.description }}</p>
+                  <h5 v-text="l.title"></h5>
+                  <p v-text="l.description"></p>
                 </div></a></div>
           </div>
         </section>
@@ -229,7 +240,7 @@
           const self = this;
           $.ajax(self.settingsList).done(function(res) {
             self.list = res.data.reverse();
-            $(window).on('load', () => {
+            $(window).on('load', function() {
               $('.lost').isotope({
                 itemSelector: '.lost-items',
                 masonry: {

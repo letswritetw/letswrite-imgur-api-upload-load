@@ -1,5 +1,6 @@
 @import helper/variables
 @import helper/media
+@import helper/reset
 @import helper/helper
 @import modules/iframe-responsive
 
@@ -59,6 +60,7 @@ img
   p
     margin-bottom: .5rem
     line-height: 1.5
+    word-break: break-all
     font-size: 1rem
   a
     text-decoration: none
@@ -104,6 +106,14 @@ img
       line-height: 1.25
     .iframe-wrap, .code-wrap
       padding: 1rem 0
+
++m-480
+  .contents-wrap
+    .fb-comments
+      display: block
+      padding: 0
+    h1
+      padding: 0
 
 .chapter-title
   position: relative
@@ -221,7 +231,8 @@ form
   transition: $transition-default
   &.show
     opacity: 1
-    z-index: 999
+    z-index: 9999
+@import modules/loading-mask
 
 
 
@@ -239,7 +250,9 @@ form
   color: $black
   transition: $transition-default
   &:hover
+    background: #E1F5FE
     border-color: $main
+    text-decoration: none
 
 +m-768
   .lost-items
