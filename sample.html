@@ -115,8 +115,8 @@
           <div class="lost-items" v-for="l in list">
             <div class="card"><img :src="l.link" :alt="l.title">
               <div class="card-body">
-                <h5>圖片名稱：{{ l.title }}</h5>
-                <p>圖片描述：{{ l.description }}</p>
+                <h5>{{ l.title }}</h5>
+                <p>{{ l.description }}</p>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@
       </main>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
     <script src="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.js"></script>
     <script src="https://auguston.github.io/0-sample-github/contents/js/main.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
@@ -231,13 +231,15 @@
           const self = this;
           $.ajax(self.settingsList).done(function(res) {
             self.list = res.data.reverse();
-            $('.lost').isotope({
-              itemSelector: '.lost-items',
-              percentPosition: true,
-              masonry: {
-                columnWidth: '.lost-sizer'
-              }
-            });
+            setTimeout(function(){
+              $('.lost').isotope({
+                itemSelector: '.lost-items',
+                percentPosition: true,
+                masonry: {
+                  columnWidth: '.lost-sizer'
+                }
+              });
+            }, 3000);
           });
         }
       });

@@ -183,7 +183,7 @@ form .btn-wrap { padding: 0 !important; }
 
 .card h5, .card p { line-height: 2; }
 
-.card h5 { font-size: 18px; }
+.card h5 { font-size: 18px; width: 100%; overflow: hidden; white-space: nowrap; -o-text-overflow: ellipsis; text-overflow: ellipsis; }
 
 .card p { padding: 0 !important; font-size: 12px; }
 

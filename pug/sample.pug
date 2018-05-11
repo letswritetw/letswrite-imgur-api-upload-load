@@ -54,8 +54,8 @@ block main
       .card
         img(:src="l.link", :alt="l.title")
         .card-body
-          h5 圖片名稱：{{ l.title }}
-          p 圖片描述：{{ l.description }}
+          h5 {{ l.title }}
+          p {{ l.description }}
 
 block js
   script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js")
@@ -158,13 +158,15 @@ block js
         const self = this;
         $.ajax(self.settingsList).done(function(res) {
           self.list = res.data.reverse();
-          $('.lost').isotope({
-            itemSelector: '.lost-items',
-            percentPosition: true,
-            masonry: {
-              columnWidth: '.lost-sizer'
-            }
-          });
+          setTimeout(function(){
+            $('.lost').isotope({
+              itemSelector: '.lost-items',
+              percentPosition: true,
+              masonry: {
+                columnWidth: '.lost-sizer'
+              }
+            });
+          }, 3000);
         });
       }
     });
