@@ -51,7 +51,7 @@ block main
     .lost
       .lost-sizer
       .lost-items(v-for="l in list")
-        .card
+        a.card(:href="l.link", target="_blank")
           img(:src="l.link", :alt="l.title")
           .card-body
             h5 {{ l.title }}

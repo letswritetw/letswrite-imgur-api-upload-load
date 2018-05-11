@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#2a5298">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="https://auguston.github.io/0-sample-github/contents/vendor/waves.min.css">
-    <link rel="stylesheet" href="contents/css/main.css">
+    <link rel="stylesheet" href="contents/css/main.css?v=1.2">
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -112,14 +112,11 @@
           <h2>album images list 圖片列表</h2>
           <div class="lost">
             <div class="lost-sizer"></div>
-            <div class="lost-items" v-for="l in list">
-              <div class="card"><img :src="l.link" :alt="l.title">
+            <div class="lost-items" v-for="l in list"><a class="card" :href="l.link" target="_blank"><img :src="l.link" :alt="l.title">
                 <div class="card-body">
                   <h5>{{ l.title }}</h5>
                   <p>{{ l.description }}</p>
-                </div>
-              </div>
-            </div>
+                </div></a></div>
           </div>
         </section>
         <div class="fb-comments" data-href="https://auguston.github.io/imgur-api-upload-load/sample.html" data-numposts="5" data-colorscheme="dark"></div>

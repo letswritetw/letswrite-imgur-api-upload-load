@@ -177,6 +177,10 @@ form .btn-wrap { padding: 0 !important; }
 
 .lost-items, .lost-sizer { float: left; width: calc(99.9% * 1/4 - 30px); margin-left: 15px; margin-right: 15px; }
 
+.lost-items a { display: block; color: #414345; -webkit-transition: all 0.5s cubic-bezier(0.3, 0.1, 0.05, 1); -o-transition: all 0.5s cubic-bezier(0.3, 0.1, 0.05, 1); transition: all 0.5s cubic-bezier(0.3, 0.1, 0.05, 1); }
+
+.lost-items a:hover { border-color: #2a5298; }
+
 @media screen and (max-width: 768px) { .lost-items { float: left; width: calc(99.9% * 1/2 - 30px); margin-left: 15px; margin-right: 15px; } }
 
 @media screen and (max-width: 480px) { .lost-items { float: left; width: calc(99.9% * 1/1 - 30px); margin-left: 15px; margin-right: 15px; } }
