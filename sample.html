@@ -142,10 +142,10 @@
     <script src="https://auguston.github.io/0-sample-github/contents/js/main.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
     <script>
-      const id = 'f17e8e1219942d3';
-      const token = '6a44050c14fa434fae699485a9a34ba3c5b6fd6b';
-      const album = 'FJTRZpC';
-      const user = 'augustus0818';
+      const id = '\x66\x31\x37\x65\x38\x65\x31\x32\x31\x39\x39\x34\x32\x64\x33';
+      const token = '\x36\x61\x34\x34\x30\x35\x30\x63\x31\x34\x66\x61\x34\x33\x34\x66\x61\x65\x36\x39\x39\x34\x38\x35\x61\x39\x61\x33\x34\x62\x61\x33\x63\x35\x62\x36\x66\x64\x36\x62';
+      const album = '\x46\x4a\x54\x52\x5a\x70\x43';
+      const user = '\x61\x75\x67\x75\x73\x74\x75\x73\x30\x38\x31\x38';
       
       //- upload
       var upload = new Vue({
@@ -170,7 +170,7 @@
             this.fs.name = this.file.name;
             this.fs.size = Math.floor(this.file.size * 0.001) + 'KB';
             this.fs.thumbnail = window.URL.createObjectURL(this.file);
-            this.title = this.fs.name;
+            this.title = this.fs.name.split('.')[0];
           },
           submit() {          
             if(this.fs.name === '') {

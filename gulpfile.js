@@ -153,10 +153,10 @@ gulp.task('webServer', () => {
 	gulp.src('./')
 		.pipe(webServer({
 			https: {
-				// key: '/Users/P2120004157/Desktop/ssl/dev.mergebot.com.key',
-				// cert: '/Users/P2120004157/Desktop/ssl/dev.mergebot.com.crt'
-				key: '/Users/sean/Desktop/ssl/dev.mergebot.com.key',
-				cert: '/Users/sean/Desktop/ssl/dev.mergebot.com.crt'
+				key: '/Users/P2120004157/Desktop/ssl/dev.mergebot.com.key',
+				cert: '/Users/P2120004157/Desktop/ssl/dev.mergebot.com.crt'
+				// key: '/Users/sean/Desktop/ssl/dev.mergebot.com.key',
+				// cert: '/Users/sean/Desktop/ssl/dev.mergebot.com.crt'
 			},
 			host: serverSite,
 			fallback: 'index.html',
