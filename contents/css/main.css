@@ -247,4 +247,10 @@ form .btn-wrap { padding: 0 !important; }
 
 .card p { padding: 0 !important; font-size: 12px; }
 
+.alert-change { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 9999; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center; padding-right: 12px; padding-left: 12px; line-height: 2; background: #ffffff; background: rgba(255, 255, 255, 0.87); font-size: 20px; }
+
+.alert-change a { color: #2a5298; }
+
+.alert-change a:hover { text-decoration: none; }
+
 /*# sourceMappingURL=main.css.map */
